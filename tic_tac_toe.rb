@@ -1,7 +1,5 @@
 # tic_tac_toe.rb
-
-require 'pry'
-
+# continue to extract referenced values to constants
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
 COMPUTER_MARKER = 'O'
