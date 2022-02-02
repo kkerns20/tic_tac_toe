@@ -128,6 +128,10 @@ Playing defense is great, buts its the entirety of the game that is fun. So, let
     - defend if opponent can win; 
     - pick square #5; 
     - pick a random square.
+
+```ruby
+
+```
 3. Create a constant such that the game can be played with either player going first. The player can choose whether the player, computer, or defer to computer to choose
 4. Improve game loop to take away some redundancy
 

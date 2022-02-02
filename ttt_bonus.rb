@@ -56,7 +56,7 @@ def display_welcome
   prompt_pause(:end_goal)
   prompt_pause(:begin)
   answer = valid_input
-  quit_game if answer = 'n'
+  quit_game if answer == 'n'
 end
 
 def display_goodbye
@@ -105,16 +105,11 @@ def decide_first_turn
     prompt_pause(:invalid)
   end
 
-  answer = 'p' ? PLAYER : COMPUTER
+  answer == 'p' ? PLAYER : COMPUTER
 end
 
 def alternate_first_turn
   first_turn == PLAYER ? COMPUTER : PLAYER
-end
-
-def alternate_player(player)
-  return COMPUTER if player == PLAYER
-  return PLAYER if player == COMPUTER
 end
 
 def empty_squares(brd)
@@ -136,15 +131,15 @@ def player_places_piece!(brd)
   square = ''
   loop do
     prompt "Choose a square (#{joinor(empty_squares(brd))}):"
-    square = gets.chomp.to_i
-    if empty_squares(brd).include?(square) && square.to_s == square
+    square = gets.chomp
+    if empty_squares(brd).include?(square.to_i) && square.to_i.to_s == square
       break
     else
       prompt_pause(:invalid)
     end
   end
 
-  brd[square] = PLAYER_MARKER
+  brd[square.to_i] = PLAYER_MARKER
 end
 
 def computer_places_piece!(brd)
@@ -160,9 +155,10 @@ def find_at_risk_square(brd, marker)
     line_board_values = brd.values_at(*line)
     if line_board_values.count(marker) == 2 &&
        line_board_values.include?(INITIAL_MARKER)
-      return brd.select { |k, _| line.include?(k) }.key(INITAL_MARKER) # check logic here
+      return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) # check logic here
     end
   end
+  nil
 end
 
 def center_square(brd)
@@ -184,8 +180,13 @@ def empty_squares(brd)
 end
 
 def place_piece!(brd, player)
-  player_places_piece! if player == PLAYER
-  computer_places_piece! if player == COMPUTER
+  player_places_piece!(brd) if player == PLAYER
+  computer_places_piece!(brd) if player == COMPUTER
+end
+
+def alternate_player(player)
+  return COMPUTER if player == PLAYER
+  return PLAYER if player == COMPUTER
 end
 
 def turn_cycle(brd, score, first_turn)
@@ -237,12 +238,11 @@ def game_over(brd, score)
               SCOREBOARD: #{PLAYER}: [#{score[PLAYER]}] #{COMPUTER}: [#{score[COMPUTER]}]
               -------------------------------------
   MSG
-  end
 end
 
 def play_game(score, first_turn)
   loop do
-    board = initialize_board
+    brd = initialize_board
 
     turn_cycle(brd, score, first_turn)
     game_over(brd, score)
