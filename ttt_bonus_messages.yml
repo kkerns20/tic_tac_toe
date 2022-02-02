@@ -1,9 +1,18 @@
-:welcome:       Welcome to Tic Tac Toe!
-:goal:          Your goal is to beat the computer.
-:way_to_win:    Get three X's in a row, column, or diagonal.
-:end_goal:      The first play to win 5 games wins the tournament.
-:begin:         Enter 'y' to begin or 'n' to exit...
-:invalid:       Please enter a valid selection.
-:thank_you:     Thank you for playing Tic Tac Toe!!
-:quote:         "Don't cry because it's over, smile because it happened! \n
-                -Dr. Seuss"
+:welcome:               Welcome to Tic Tac Toe!
+:goal:                  Your goal is to beat the computer.
+:way_to_win:            Get three X's in a row, column, or diagonal.
+:end_goal:              The first play to win 5 games wins the tournament.
+:begin:                 Enter 'y' to begin or 'n' to exit...
+:invalid:               Please enter a valid selection.
+:thank_you:             Thank you for playing Tic Tac Toe!!
+:quote:                 "Don't cry because it's over, smile because it happened! \n
+                        -Dr. Seuss"
+:decide_first_turn:     "Who should go first? \n
+                        Enter 'p' for PLAYER or 'c' for COMPUTER."
+:tie:                   It's a tie!
+:keep_playing:          Would you like to keep playing? Enter 'y' or 'n'
+:computer_won:          "Alas, you have been beaten by a simple program1 \n
+                        Shame on you!"
+:kidding:               "I joke! I joke! I kid! I kid. \n
+                        It was awesome programming, I know ;)"
+:player_won:            You won! What an awesome Tic Tac Toe savant you must be...

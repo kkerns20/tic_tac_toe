@@ -140,7 +140,6 @@ Playing defense is great, buts its the entirety of the game that is fun. So, let
 
 ### Who is gonna go first?
 
-  - Create a constant `FIRST_TURN = { current_player: 'choose' }
   - In another method, prompt the user to choose who will go first, `'Player'` or `'Computer'`
       - Have 'p' = PLAER and 'c' = COMPUTER
       - validate input
