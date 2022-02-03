@@ -17,7 +17,7 @@ WINNING_LINES = [[1, 2, 3], [4, 5, 6], [7, 8, 9]] + # rows
                 [[1, 4, 7], [2, 5, 8], [3, 6, 9]] + # cols
                 [[1, 5, 9], [3, 5, 7]]              # diagonals
 
-def prompt_pause(action, info='', punctuation='')
+def prompt_pause(action)
   puts ">> #{MESSAGES[action]}"
   sleep(1.5)
 end
@@ -63,7 +63,7 @@ def display_goodbye
   prompt_pause(:quote)
 end
 
-# rubocop:disable MEtric/AbcSize, Metrics/MethodLength
+# rubocop:disable Metrics/AbcSize, Metrics/MethodLength
 def display_board(brd, score)
   clear_screen
   puts "You are #{PLAYER_MARKER}, the Computer is #{COMPUTER_MARKER}."
@@ -86,7 +86,7 @@ def display_board(brd, score)
   puts "     |     |     "
   puts ""
 end
-# rubocop:enable MEtric/AbcSize, Metrics/MethodLength
+# rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
 def initialize_board
   new_board = {}
@@ -154,7 +154,7 @@ end
 #     line_board_values = brd.values_at(*line)
 #     if line_board_values.count(marker) == 2 &&
 #        line_board_values.include?(INITIAL_MARKER)
-#       return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) 
+#       return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER)
 #     end
 #   end
 #   nil
@@ -180,10 +180,9 @@ def computer_places_piece!(brd)
   brd[square] = COMPUTER_MARKER
 end
 
-
 def smart_computer_moves(line, brd, marker)
   if brd.values_at(*line).count(marker) == 2 &&
-    brd.values_at(*line).count(INITIAL_MARKER) == 1
+     brd.values_at(*line).count(INITIAL_MARKER) == 1
     line.find { |sq| brd[sq] == INITIAL_MARKER }
   end
 end
@@ -191,7 +190,7 @@ end
 def center_corner_random(brd)
   if brd[5] == INITIAL_MARKER
     5
-  elsif brd[5] == PLAYER_MARKER || 
+  elsif brd[5] == PLAYER_MARKER ||
         brd[5] == COMPUTER_MARKER
     corner_play(brd)
   else
@@ -203,7 +202,7 @@ def corner_play(brd)
   if brd.values_at(1, 9).all?(PLAYER_MARKER) ||
      brd.values_at(3, 7).all?(PLAYER_MARKER)
     brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
-  # elsif brd.values_at(1, 3).all?(PLAYER_MARKER) || # I can't win with this enabled
+  # elsif brd.values_at(1, 3).all?(PLAYER_MARKER) || # I can't win with this
   #       brd.values_at(3, 9).all?(PLAYER_MARKER) ||
   #       brd.values_at(1, 7).all?(PLAYER_MARKER) ||
   #       brd.values_at(7, 9).all?(PLAYER_MARKER)
@@ -251,7 +250,7 @@ end
 
 def detect_winner(brd)
   WINNING_LINES.each do |line|
-    if brd.values_at(*line).count(PLAYER_MARKER) == 3 
+    if brd.values_at(*line).count(PLAYER_MARKER) == 3
       return PLAYER
     elsif brd.values_at(*line).count(COMPUTER_MARKER) == 3
       return COMPUTER
@@ -301,7 +300,7 @@ end
 
 def tournament_over?(score)
   score[PLAYER] >= TOURNAMENT_GAMES ||
-  score[COMPUTER] >= TOURNAMENT_GAMES
+    score[COMPUTER] >= TOURNAMENT_GAMES
 end
 
 def play_tournament
