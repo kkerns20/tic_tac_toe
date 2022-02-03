@@ -1,6 +1,6 @@
 # ttt_bonus.rb
 # Bonus Features
-require 'pry-byebug'
+
 require 'yaml'
 MESSAGES = YAML.load_file('ttt_bonus_messages.yml')
 
@@ -141,7 +141,7 @@ def player_places_piece!(brd)
   brd[square.to_i] = PLAYER_MARKER
 end
 
-# def computer_places_piece!(brd)
+# def computer_places_piece!(brd) # Couldn't get this to work-might debug
 #   find_at_risk_square(brd, COMPUTER_MARKER) ||
 #   find_at_risk_square(brd, PLAYER_MARKER) ||
 #   center_square(brd) ||
@@ -154,7 +154,7 @@ end
 #     line_board_values = brd.values_at(*line)
 #     if line_board_values.count(marker) == 2 &&
 #        line_board_values.include?(INITIAL_MARKER)
-#       return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) # check logic here
+#       return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) 
 #     end
 #   end
 #   nil
