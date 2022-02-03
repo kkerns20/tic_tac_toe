@@ -1,13 +1,12 @@
 # ttt_bonus.rb
 # Bonus Features
-
+require 'pry-byebug'
 require 'yaml'
 MESSAGES = YAML.load_file('ttt_bonus_messages.yml')
 
 PLAYER = 'Player'
 COMPUTER = 'Computer'
 YES_OR_NO = %w(y n yes no)
-UNBEATABLE = false
 
 INITIAL_MARKER = ' '
 PLAYER_MARKER = 'X'
@@ -108,7 +107,7 @@ def decide_first_turn
   answer == 'p' ? PLAYER : COMPUTER
 end
 
-def alternate_first_turn
+def alternate_first_turn(first_turn)
   first_turn == PLAYER ? COMPUTER : PLAYER
 end
 
@@ -118,12 +117,12 @@ end
 
 def joinor(array, delimiter = ', ', conjunction = 'or')
   case array.size
-  when 0 then ' '
+  when 0 then ''
   when 1 then array[0].to_s
-  when 2 then "#{array[0]} #{delimiter} #{array[1]}"
+  when 2 then "#{array[0]} #{conjunction} #{array[1]}"
   else
     array[0..-2].join(delimiter) +
-      "#{delimiter} #{conjunction} #{array[-1]}"
+      "#{delimiter}#{conjunction} #{array[-1]}"
   end
 end
 
@@ -142,41 +141,76 @@ def player_places_piece!(brd)
   brd[square.to_i] = PLAYER_MARKER
 end
 
+# def computer_places_piece!(brd)
+#   find_at_risk_square(brd, COMPUTER_MARKER) ||
+#   find_at_risk_square(brd, PLAYER_MARKER) ||
+#   center_square(brd) ||
+#   corner_play(brd) ||
+#   empty_squares(brd).sample
+# end
+
+# def find_at_risk_square(brd, marker)
+#   WINNING_LINES.each do |line|
+#     line_board_values = brd.values_at(*line)
+#     if line_board_values.count(marker) == 2 &&
+#        line_board_values.include?(INITIAL_MARKER)
+#       return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) # check logic here
+#     end
+#   end
+#   nil
+# end
+
 def computer_places_piece!(brd)
-  find_at_risk_square(brd, COMPUTER_MARKER) ||
-  find_at_risk_square(brd, PLAYER_MARKER) ||
-  center_square(brd) ||
-  corner_play(brd) ||
-  empty_squares(brd).sample
-end
+  square = nil
 
-def find_at_risk_square(brd, marker)
   WINNING_LINES.each do |line|
-    line_board_values = brd.values_at(*line)
-    if line_board_values.count(marker) == 2 &&
-       line_board_values.include?(INITIAL_MARKER)
-      return brd.select { |k, _| line.include?(k) }.key(INITIAL_MARKER) # check logic here
-    end
+    break if square
+    square = smart_computer_moves(line, brd, COMPUTER_MARKER)
   end
-  nil
+
+  WINNING_LINES.each do |line|
+    break if square
+    square = smart_computer_moves(line, brd, PLAYER_MARKER)
+  end
+
+  if !square
+    square = center_corner_random(brd)
+  end
+
+  brd[square] = COMPUTER_MARKER
 end
 
-def center_square(brd)
-  5 if brd[5] == INITIAL_MARKER
+
+def smart_computer_moves(line, brd, marker)
+  if brd.values_at(*line).count(marker) == 2 &&
+    brd.values_at(*line).count(INITIAL_MARKER) == 1
+    line.find { |sq| brd[sq] == INITIAL_MARKER }
+  end
+end
+
+def center_corner_random(brd)
+  if brd[5] == INITIAL_MARKER
+    5
+  elsif brd[5] == PLAYER_MARKER || 
+        brd[5] == COMPUTER_MARKER
+    corner_play(brd)
+  else
+    empty_squares(brd).sample
+  end
 end
 
 def corner_play(brd)
-  return unless UNBEATABLE
   if brd.values_at(1, 9).all?(PLAYER_MARKER) ||
      brd.values_at(3, 7).all?(PLAYER_MARKER)
     brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
+  # elsif brd.values_at(1, 3).all?(PLAYER_MARKER) || # I can't win with this enabled
+  #       brd.values_at(3, 9).all?(PLAYER_MARKER) ||
+  #       brd.values_at(1, 7).all?(PLAYER_MARKER) ||
+  #       brd.values_at(7, 9).all?(PLAYER_MARKER)
+  #   brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
   else
     brd.slice(1, 3, 7, 9).key(INITIAL_MARKER)
   end
-end
-
-def empty_squares(brd)
-  brd.keys.select { |key| brd[key] == INITIAL_MARKER }
 end
 
 def place_piece!(brd, player)
@@ -195,19 +229,24 @@ def turn_cycle(brd, score, first_turn)
   loop do
     display_board(brd, score)
     place_piece!(brd, current_player)
+    # binding.pry
     current_player = alternate_player(current_player)
-    break if someone_won?(brd) || board_full?(brd)
+    break if someone_won?(brd) || tie?(brd) || board_full?(brd)
   end
 
   display_board(brd, score)
 end
 
-def board_full?(brd)
-  empty_squares(brd).empty?
-end
-
 def someone_won?(brd)
   !!detect_winner(brd)
+end
+
+def tie?(brd)
+  empty_squares(brd).size == 1
+end
+
+def board_full?(brd)
+  empty_squares(brd).empty?
 end
 
 def detect_winner(brd)
