@@ -202,11 +202,11 @@ def corner_play(brd)
   if brd.values_at(1, 9).all?(PLAYER_MARKER) ||
      brd.values_at(3, 7).all?(PLAYER_MARKER)
     brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
-  # elsif brd.values_at(1, 3).all?(PLAYER_MARKER) || # I can't win with this
-  #       brd.values_at(3, 9).all?(PLAYER_MARKER) ||
-  #       brd.values_at(1, 7).all?(PLAYER_MARKER) ||
-  #       brd.values_at(7, 9).all?(PLAYER_MARKER)
-  #   brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
+  elsif brd.values_at(1, 3).all?(PLAYER_MARKER) || # I can't win with this
+        brd.values_at(3, 9).all?(PLAYER_MARKER) ||
+        brd.values_at(1, 7).all?(PLAYER_MARKER) ||
+        brd.values_at(7, 9).all?(PLAYER_MARKER)
+    brd.slice(2, 4, 6, 8).key(INITIAL_MARKER)
   else
     brd.slice(1, 3, 7, 9).key(INITIAL_MARKER)
   end
